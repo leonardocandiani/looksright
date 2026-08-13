@@ -1,0 +1,51 @@
+{
+  "name": "looksright",
+  "version": "0.1.0",
+  "description": "Open a page and check whether it actually looks right. Blank screens, mobile overflow, unreadable dark mode, console errors, broken images.",
+  "type": "module",
+  "bin": {
+    "looksright": "./bin/looksright.mjs"
+  },
+  "exports": {
+    ".": "./src/index.mjs",
+    "./checks": "./src/checks/index.mjs"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20.14"
+  },
+  "scripts": {
+    "test": "node --test \"test/**/*.test.mjs\"",
+    "check:self": "node bin/looksright.mjs check --help"
+  },
+  "dependencies": {
+    "playwright-core": "^1.49.0"
+  },
+  "keywords": [
+    "ui",
+    "visual-testing",
+    "accessibility",
+    "contrast",
+    "responsive",
+    "playwright",
+    "agent",
+    "claude-code",
+    "ai",
+    "qa"
+  ],
+  "author": "Leonardo Candiani",
+  "license": "MIT",
+  "homepage": "https://github.com/leonardocandiani/looksright",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leonardocandiani/looksright.git"
+  },
+  "bugs": {
+    "url": "https://github.com/leonardocandiani/looksright/issues"
+  }
+}

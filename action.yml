@@ -1,0 +1,173 @@
+name: LooksRight
+description: Open a page in a real Chrome across viewports and themes, run 11 rendering checks, and publish the report to the job summary.
+author: Leonardo Candiani
+
+branding:
+  icon: eye
+  color: orange
+
+inputs:
+  url:
+    description: URL to check. The app must already be serving when this step runs.
+    required: true
+  config:
+    description: Path to a looksright config file. Defaults to whatever the repo root has.
+    required: false
+    default: ''
+  viewport:
+    description: Comma separated viewports, e.g. "phone,desktop" or "412x915". Defaults to all three.
+    required: false
+    default: ''
+  theme:
+    description: Comma separated themes, e.g. "light,dark". Defaults to both.
+    required: false
+    default: ''
+  shots:
+    description: Directory to write one screenshot per scene. Empty means no screenshots.
+    required: false
+    default: ''
+  fail-on:
+    description: When to fail the job. error (default), warn, or never.
+    required: false
+    default: 'error'
+  version:
+    description: npm version of looksright to install.
+    required: false
+    default: 'latest'
+  node-version:
+    description: Node version used to run looksright.
+    required: false
+    default: '20'
+
+outputs:
+  ok:
+    description: 'true when no error level finding survived'
+    value: ${{ steps.looksright.outputs.ok }}
+  errors:
+    description: Number of error level findings
+    value: ${{ steps.looksright.outputs.errors }}
+  warnings:
+    description: Number of warning level findings
+    value: ${{ steps.looksright.outputs.warnings }}
+  json:
+    description: Path to the JSON report
+    value: ${{ steps.looksright.outputs.json }}
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Install looksright
+      shell: bash
+      env:
+        LR_VERSION: ${{ inputs.version }}
+      run: npm install -g "looksright@${LR_VERSION}"
+
+    - name: Install Chromium
+      shell: bash
+      run: |
+        set -euo pipefail
+        # The runner has no Chrome on PATH, so we install the Playwright build.
+        # It has to match the playwright-core that looksright resolved, otherwise
+        # the launcher looks for a browser revision that was never downloaded.
+        ROOT="$(npm root -g)"
+        PW="$(node -e "console.log(require(require.resolve('playwright-core/package.json',{paths:['${ROOT}/looksright']})).version)" 2>/dev/null || true)"
+        if [ -n "$PW" ]; then
+          echo "playwright-core ${PW}"
+          npx --yes "playwright@${PW}" install --with-deps chromium
+        else
+          echo "Could not resolve playwright-core, falling back to the latest CLI"
+          npx --yes playwright install --with-deps chromium
+        fi
+
+    - name: Check the page
+      id: looksright
+      shell: bash
+      env:
+        LR_URL: ${{ inputs.url }}
+        LR_CONFIG: ${{ inputs.config }}
+        LR_VIEWPORT: ${{ inputs.viewport }}
+        LR_THEME: ${{ inputs.theme }}
+        LR_SHOTS: ${{ inputs.shots }}
+      run: |
+        set -uo pipefail
+        ARGS=(check "$LR_URL" --json looksright.json --md looksright.md)
+        [ -n "$LR_CONFIG" ] && ARGS+=(--config "$LR_CONFIG")
+        [ -n "$LR_VIEWPORT" ] && ARGS+=(--viewport "$LR_VIEWPORT")
+        [ -n "$LR_THEME" ] && ARGS+=(--theme "$LR_THEME")
+        [ -n "$LR_SHOTS" ] && ARGS+=(--shots "$LR_SHOTS")
+
+        # Composite steps do not support continue-on-error, so the exit code is
+        # captured here and the decision is made in the step below.
+        looksright "${ARGS[@]}"
+        CODE=$?
+
+        if [ "$CODE" -ge 2 ] || [ ! -f looksright.json ]; then
+          echo "looksright failed to run (exit ${CODE})" >&2
+          echo "ok=false" >> "$GITHUB_OUTPUT"
+          echo "errors=0" >> "$GITHUB_OUTPUT"
+          echo "warnings=0" >> "$GITHUB_OUTPUT"
+          echo "json=" >> "$GITHUB_OUTPUT"
+          exit "$CODE"
+        fi
+
+        node -e '
+          const r = require("./looksright.json");
+          const out = require("fs");
+          out.appendFileSync(process.env.GITHUB_OUTPUT,
+            `ok=${r.ok}\nerrors=${r.errors}\nwarnings=${r.warnings}\njson=looksright.json\n`);
+        '
+
+    - name: Publish the report
+      if: always()
+      shell: bash
+      run: |
+        set -uo pipefail
+        if [ ! -f looksright.md ]; then
+          echo "LooksRight produced no report." >> "$GITHUB_STEP_SUMMARY"
+          exit 0
+        fi
+        # Screenshot paths are local to the workspace and do not resolve in the
+        # summary, so the image lines are dropped here. Upload the directory with
+        # actions/upload-artifact if you want to look at them.
+        grep -v '^!\[' looksright.md >> "$GITHUB_STEP_SUMMARY" || true
+
+    - name: Decide the outcome
+      if: always()
+      shell: bash
+      env:
+        FAIL_ON: ${{ inputs.fail-on }}
+        ERRORS: ${{ steps.looksright.outputs.errors }}
+        WARNINGS: ${{ steps.looksright.outputs.warnings }}
+      run: |
+        set -euo pipefail
+        ERRORS="${ERRORS:-0}"
+        WARNINGS="${WARNINGS:-0}"
+        echo "${ERRORS} errors, ${WARNINGS} warnings, fail-on=${FAIL_ON}"
+
+        case "$FAIL_ON" in
+          never)
+            exit 0
+            ;;
+          warn)
+            if [ "$ERRORS" -gt 0 ] || [ "$WARNINGS" -gt 0 ]; then
+              echo "Failing: fail-on is warn and the run is not clean." >&2
+              exit 1
+            fi
+            ;;
+          error)
+            if [ "$ERRORS" -gt 0 ]; then
+              echo "Failing: ${ERRORS} error level findings." >&2
+              exit 1
+            fi
+            ;;
+          *)
+            echo "Unknown fail-on value \"${FAIL_ON}\". Use error, warn, or never." >&2
+            exit 1
+            ;;
+        esac
+        echo "Looks right."

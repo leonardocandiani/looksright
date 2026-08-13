@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" width="1280" height="640" role="img" aria-label="LooksRight - open the page and check whether it actually looks right">
+  <title>LooksRight</title>
+  <defs>
+    <clipPath id="b-frame">
+      <rect x="96" y="232" width="176" height="176" rx="44" />
+    </clipPath>
+  </defs>
+
+  <rect width="1280" height="640" fill="#15181C" />
+
+  <!-- A faint grid, like a layout guide. It sits behind everything at low
+       opacity so the type stays the loudest thing on the banner. -->
+  <g stroke="#FF6B2C" stroke-width="1" opacity="0.10">
+    <path d="M0 160H1280M0 320H1280M0 480H1280" />
+    <path d="M320 0V640M640 0V640M960 0V640" />
+  </g>
+
+  <g clip-path="url(#b-frame)">
+    <rect x="96" y="232" width="88" height="176" fill="#F4F1EC" />
+    <rect x="184" y="232" width="88" height="176" fill="#15181C" />
+  </g>
+  <rect x="96" y="232" width="176" height="176" rx="44" fill="none" stroke="#FF6B2C" stroke-width="10" />
+  <path d="M138 323 L170 355" fill="none" stroke="#15181C" stroke-width="17" stroke-linecap="round" />
+  <path d="M170 355 L229 289" fill="none" stroke="#FF6B2C" stroke-width="17" stroke-linecap="round" />
+
+  <text x="320" y="300" fill="#F4F1EC" font-family="'SF Mono','Menlo','DejaVu Sans Mono',monospace" font-size="86" font-weight="700" letter-spacing="-2">
+    looksright
+  </text>
+  <text x="322" y="352" fill="#9AA3AD" font-family="'SF Mono','Menlo','DejaVu Sans Mono',monospace" font-size="27">
+    Your agent says the page is done.
+  </text>
+  <text x="322" y="392" fill="#FF6B2C" font-family="'SF Mono','Menlo','DejaVu Sans Mono',monospace" font-size="27">
+    This opens it and looks.
+  </text>
+
+  <g font-family="'SF Mono','Menlo','DejaVu Sans Mono',monospace" font-size="21" fill="#6F7883">
+    <text x="322" y="452">blank screens · mobile overflow · unreadable dark mode</text>
+    <text x="322" y="484">console errors · broken images · clipped text · tiny targets</text>
+  </g>
+</svg>

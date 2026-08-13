@@ -1,0 +1,8 @@
+node_modules/
+.looksright/
+looksright.json
+looksright.md
+*.log
+coverage/
+.DS_Store
+_temp/

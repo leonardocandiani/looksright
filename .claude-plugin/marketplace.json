@@ -1,0 +1,23 @@
+{
+  "name": "looksright",
+  "owner": {
+    "name": "Leonardo Candiani"
+  },
+  "metadata": {
+    "description": "looksright — your agent says the page is done. LooksRight opens it and looks.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "looksright",
+      "description": "Opens every route in a real Chrome, across viewports and themes, and runs 11 deterministic checks: blank page, console errors, failed requests, stuck loading, horizontal overflow, clipped text, invisible text, contrast, broken images, tiny targets, missing labels. Exits 1 on error, so it gates CI as is.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Leonardo Candiani"
+      },
+      "homepage": "https://github.com/leonardocandiani/looksright",
+      "license": "MIT",
+      "source": "."
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "looksright",
+  "version": "0.1.0",
+  "description": "Open the page in a real Chrome and check whether it actually looks right. Blank screens, mobile overflow, unreadable dark mode, console errors, broken images, stuck spinners.",
+  "author": {
+    "name": "Leonardo Candiani"
+  },
+  "homepage": "https://github.com/leonardocandiani/looksright",
+  "repository": "https://github.com/leonardocandiani/looksright",
+  "license": "MIT",
+  "keywords": [
+    "ui",
+    "visual-testing",
+    "accessibility",
+    "contrast",
+    "responsive",
+    "playwright",
+    "ci",
+    "qa"
+  ]
+}

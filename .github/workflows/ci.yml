@@ -1,0 +1,137 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test on Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['20', '22']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Chromium
+        # The runner has no Chrome on PATH, and looksright does not download a
+        # browser. The Playwright CLI version has to match the playwright-core in
+        # node_modules, otherwise the launcher looks for a revision nobody pulled.
+        run: |
+          set -euo pipefail
+          PW="$(node -p "require('./node_modules/playwright-core/package.json').version")"
+          echo "playwright-core ${PW}"
+          npx --yes "playwright@${PW}" install --with-deps chromium
+
+      - name: Run tests
+        run: npm test
+
+      - name: CLI smoke test
+        run: |
+          set -euo pipefail
+          node bin/looksright.mjs checks
+          node bin/looksright.mjs --help
+
+  structure:
+    name: Validate package structure
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check package manifest
+        run: |
+          set -euo pipefail
+          node -e "
+            const p = require('./package.json');
+            if (p.name !== 'looksright') { console.error('package.json name is not looksright'); process.exit(1); }
+            if (!p.bin || !p.bin.looksright) { console.error('bin.looksright missing'); process.exit(1); }
+            if (p.license !== 'MIT') { console.error('license is not MIT'); process.exit(1); }
+          "
+
+      - name: Check plugin manifest
+        run: |
+          set -euo pipefail
+          test -f .claude-plugin/plugin.json || { echo ".claude-plugin/plugin.json missing"; exit 1; }
+          test -f .claude-plugin/marketplace.json || { echo ".claude-plugin/marketplace.json missing"; exit 1; }
+          node -e "
+            const p = require('./.claude-plugin/plugin.json');
+            if (p.name !== 'looksright') { console.error('plugin.json name is not looksright'); process.exit(1); }
+          "
+          node -e "JSON.parse(require('fs').readFileSync('.claude-plugin/marketplace.json','utf8'))"
+
+      - name: Check the 11 checks are all wired
+        run: |
+          set -euo pipefail
+          for c in blank-page console-errors failed-requests stuck-loading horizontal-overflow \
+                   clipped-text invisible-text contrast broken-images tiny-targets missing-labels; do
+            test -f "src/checks/$c.mjs" || { echo "src/checks/$c.mjs missing"; exit 1; }
+            grep -q "$c" src/checks/index.mjs || { echo "$c is not registered in src/checks/index.mjs"; exit 1; }
+          done
+          echo "All 11 checks present and registered"
+
+      - name: Check commands, skill and agent
+        run: |
+          set -euo pipefail
+          for c in check setup; do
+            test -f "commands/$c.md" || { echo "commands/$c.md missing"; exit 1; }
+          done
+          test -f skills/looksright/SKILL.md || { echo "skills/looksright/SKILL.md missing"; exit 1; }
+          head -1 skills/looksright/SKILL.md | grep -q "^---$" || { echo "SKILL.md missing frontmatter"; exit 1; }
+          grep -q "^name: looksright$" skills/looksright/SKILL.md || { echo "SKILL.md frontmatter name missing"; exit 1; }
+          grep -q "^description:" skills/looksright/SKILL.md || { echo "SKILL.md frontmatter description missing"; exit 1; }
+          test -f agents/ui-judge.md || { echo "agents/ui-judge.md missing"; exit 1; }
+          grep -q "^name: ui-judge$" agents/ui-judge.md || { echo "ui-judge frontmatter name missing"; exit 1; }
+
+      - name: Check the action manifest
+        run: |
+          set -euo pipefail
+          test -f action.yml || { echo "action.yml missing"; exit 1; }
+          for i in url config viewport theme shots fail-on; do
+            grep -qE "^  $i:" action.yml || { echo "action.yml input $i missing"; exit 1; }
+          done
+
+      - name: Check docs and license
+        run: |
+          set -euo pipefail
+          test -f README.md || { echo "README.md missing"; exit 1; }
+          test -f LICENSE || { echo "LICENSE missing"; exit 1; }
+          test -f assets/logo.svg || { echo "assets/logo.svg missing"; exit 1; }
+
+      - name: No secrets committed
+        run: |
+          set -euo pipefail
+          PATTERNS=(
+            "pk_live_[A-Za-z0-9]{20,}"
+            "sk_live_[A-Za-z0-9]{20,}"
+            "sbp_[a-f0-9]{40}"
+            "ghp_[A-Za-z0-9]{36}"
+            "sk-ant-api[0-9]+-[A-Za-z0-9_-]+"
+            "sk-ant-oat01-[A-Za-z0-9_-]+"
+          )
+          FOUND=0
+          for pat in "${PATTERNS[@]}"; do
+            MATCHES=$(grep -rEn "$pat" --include="*.md" --include="*.mjs" --include="*.js" --include="*.yml" --include="*.json" --exclude-dir=node_modules --exclude-dir=.git . || true)
+            if [ -n "$MATCHES" ]; then
+              echo "Secret pattern matched: $pat"
+              echo "$MATCHES"
+              FOUND=$((FOUND + 1))
+            fi
+          done
+          if [ $FOUND -gt 0 ]; then exit 1; fi
+          echo "No secrets detected"

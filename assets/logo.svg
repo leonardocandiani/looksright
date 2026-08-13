@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="LooksRight">
+  <title>LooksRight</title>
+  <defs>
+    <clipPath id="lr-frame">
+      <rect x="24" y="24" width="208" height="208" rx="52" />
+    </clipPath>
+  </defs>
+
+  <!-- The mark is one screen split down the middle: the same check has to
+       read on both halves, which is the whole job of the tool. -->
+  <g clip-path="url(#lr-frame)">
+    <rect x="24" y="24" width="104" height="208" fill="#F4F1EC" />
+    <rect x="128" y="24" width="104" height="208" fill="#15181C" />
+  </g>
+
+  <rect x="24" y="24" width="208" height="208" rx="52" fill="none" stroke="#FF6B2C" stroke-width="12" />
+
+  <!-- Drawn as two strokes, one per half, so each keeps contrast against the
+       ground behind it instead of vanishing on one side. -->
+  <path d="M74 132 L112 170" fill="none" stroke="#15181C" stroke-width="20" stroke-linecap="round" />
+  <path d="M112 170 L182 92" fill="none" stroke="#FF6B2C" stroke-width="20" stroke-linecap="round" />
+</svg>
