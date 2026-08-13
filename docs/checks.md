@@ -258,6 +258,35 @@ Instead of guessing the page background from the theme flag, it probes the brows
 
 ---
 
+## leaked-markup
+
+**Level:** error. **Source:** `src/checks/leaked-markup.mjs`
+
+### What it catches
+
+Markup that reached the screen as text. Seven kinds, each named in its own message: Markdown bold (`**total**`), WhatsApp bold, italic and strikethrough (`*teste*`, `_texto_`, `~texto~`), a Markdown link that never became a link, a Markdown heading, a raw HTML tag or entity (`<br>`, `&amp;`), an unfilled template placeholder (`{{user.name}}`, `${price}`), and a stray `undefined`, `null`, `NaN` or `[object Object]`.
+
+### Why it matters
+
+These never throw. The DOM is valid, the types check, the request succeeded, and the page renders a string that was supposed to be interpreted by something and got printed instead. It is the class of bug people find in a screenshot days later, usually a customer's.
+
+The common cause is two systems disagreeing about who renders what: a message stored with one flavour of markup and displayed by a component that knows another, a template engine that ran on the server but not on the client, an API field that arrived undefined and went straight into the sentence.
+
+Findings are grouped by kind and counted: ten bubbles with the same unrendered bold are one bug in one component, and ten lines would bury everything else on the scene.
+
+### What it stays quiet about
+
+- **Anything inside `<code>`, `<pre>`, `<kbd>`, `<samp>`, a `<textarea>` or a `[contenteditable]`**, and inside the containers the usual syntax highlighters own (`.hljs`, `.cm-editor`, `.monaco-editor`, `.shiki`, `.highlight`). Documentation that shows `*mensagem*` as an example is doing its job.
+- **Punctuation that is not wrapping anything.** `R$ 2 * 3 * 4` is multiplication, `relatorio_final_2026.pdf` is a filename, `10~15 dias` is a range. Every inline pattern requires the delimiter to sit at a word boundary and to close around real content, which is the same rule the WhatsApp and Markdown parsers use.
+- **Hidden text**: `display: none`, `visibility: hidden`, or a box under 1px. Nobody is reading it.
+- **Text under 3 characters**, and anything past the first match in a node: one accusation per text node is enough to send someone to the component.
+
+### How to silence it
+
+`ignoreSelectors` for a widget that legitimately prints markup (a template editor preview, a syntax cheat sheet you wrote by hand), or `warnOnly: ["leaked-markup"]` while a migration is in flight.
+
+---
+
 ## contrast
 
 **Level:** warn. **Source:** `src/checks/contrast.mjs`

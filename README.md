@@ -12,7 +12,7 @@
 
 An agent finishes a screen and reports it done. The build passes, the types check, the unit tests are green. You open it on your phone and the page is blank, or the price is invisible in dark mode, or the whole layout slides sideways under your thumb. None of those failures throw. None of them have a stack trace. Nothing in a type checker or a test runner has ever looked at a pixel.
 
-LooksRight closes that gap the boring way: it opens the page in a real Chrome, once for every combination of route, viewport and theme, and runs 11 deterministic checks against the rendered DOM. No baseline images, no snapshots to approve, no service to sign up for. Each finding names the element and the number behind the claim, so it points at a line to go fix instead of a screenshot to squint at.
+LooksRight closes that gap the boring way: it opens the page in a real Chrome, once for every combination of route, viewport and theme, and runs 12 deterministic checks against the rendered DOM. No baseline images, no snapshots to approve, no service to sign up for. Each finding names the element and the number behind the claim, so it points at a line to go fix instead of a screenshot to squint at.
 
 It exits 1 when it finds an error, which is the entire CI integration. Drop the command in a workflow after your app starts and the build fails when the screen is broken.
 
@@ -93,6 +93,7 @@ npx looksright checks    # lists the checks and their default level
 | `horizontal-overflow` | error | the page scrolls sideways on a phone, naming the element that does it, plus a missing `<meta viewport>` |
 | `clipped-text` | warn | text cut off by its container with no ellipsis to signal it |
 | `invisible-text` | error | text nearly the same color as its own background (ratio under 1.35), the half-finished theme bug |
+| `leaked-markup` | error | markup printed as text: `*bold*`, `**bold**`, `[link](url)`, `<br>`, `&amp;`, `{{placeholder}}`, a stray `undefined` |
 | `contrast` | warn | WCAG AA contrast failures measured on the text actually painted |
 | `broken-images` | error | an `<img>` that did not load, a web font the browser gave up on |
 | `tiny-targets` | warn | touch targets under 24px (error) or 44px (warn), on phone viewports only |

@@ -6,6 +6,7 @@ import contrast from './contrast.mjs';
 import failedRequests from './failed-requests.mjs';
 import horizontalOverflow from './horizontal-overflow.mjs';
 import invisibleText from './invisible-text.mjs';
+import leakedMarkup from './leaked-markup.mjs';
 import missingLabels from './missing-labels.mjs';
 import stuckLoading from './stuck-loading.mjs';
 import tinyTargets from './tiny-targets.mjs';
@@ -25,6 +26,7 @@ export const CHECKS = [
   horizontalOverflow,
   clippedText,
   invisibleText,
+  leakedMarkup,
   contrast,
   brokenImages,
   tinyTargets,

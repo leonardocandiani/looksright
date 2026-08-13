@@ -10,7 +10,7 @@
   "plugins": [
     {
       "name": "looksright",
-      "description": "Opens every route in a real Chrome, across viewports and themes, and runs 11 deterministic checks: blank page, console errors, failed requests, stuck loading, horizontal overflow, clipped text, invisible text, contrast, broken images, tiny targets, missing labels. Exits 1 on error, so it gates CI as is.",
+      "description": "Opens every route in a real Chrome, across viewports and themes, and runs 12 deterministic checks: blank page, console errors, failed requests, stuck loading, horizontal overflow, clipped text, invisible text, leaked markup, contrast, broken images, tiny targets, missing labels. Exits 1 on error, so it gates CI as is.",
       "version": "0.1.0",
       "author": {
         "name": "Leonardo Candiani"

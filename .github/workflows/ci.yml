@@ -75,15 +75,16 @@ jobs:
           "
           node -e "JSON.parse(require('fs').readFileSync('.claude-plugin/marketplace.json','utf8'))"
 
-      - name: Check the 11 checks are all wired
+      - name: Check the 12 checks are all wired
         run: |
           set -euo pipefail
           for c in blank-page console-errors failed-requests stuck-loading horizontal-overflow \
-                   clipped-text invisible-text contrast broken-images tiny-targets missing-labels; do
+                   clipped-text invisible-text leaked-markup contrast broken-images tiny-targets \
+                   missing-labels; do
             test -f "src/checks/$c.mjs" || { echo "src/checks/$c.mjs missing"; exit 1; }
             grep -q "$c" src/checks/index.mjs || { echo "$c is not registered in src/checks/index.mjs"; exit 1; }
           done
-          echo "All 11 checks present and registered"
+          echo "All 12 checks present and registered"
 
       - name: Check commands, skill and agent
         run: |

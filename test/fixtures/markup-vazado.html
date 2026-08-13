@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Markup vazado</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { margin: 0; padding: 24px; font: 16px/1.6 system-ui, sans-serif;
+         background: #ffffff; color: #16181d; }
+  @media (prefers-color-scheme: dark) { body { background: #14161a; color: #f2f4f7; } }
+  .bolha { max-width: 34rem; padding: 10px 14px; border-radius: 12px;
+           background: #d9fdd3; color: #111b21; margin-bottom: 10px; }
+  code, pre { background: #eceff3; color: #16181d; padding: 2px 6px; border-radius: 4px; }
+  button { min-width: 48px; min-height: 48px; }
+</style></head>
+<body>
+  <h1>Conversa</h1>
+
+  <!-- Estes devem ser acusados: marcacao que virou texto na tela -->
+  <div class="bolha">*teste*</div>
+  <div class="bolha">O total é **R$ 1.250,00** com desconto</div>
+  <div class="bolha">Veja o <a href="#">[manual](https://exemplo.com/manual)</a> completo</div>
+  <div class="bolha">Bem-vindo, {{cliente.nome}}!</div>
+  <div class="bolha">Prazo &amp;amp; condições</div>
+  <div class="bolha">Assistência 24h&lt;br&gt;disponível</div>
+  <p>Saldo: undefined</p>
+
+  <!-- Estes NAO podem ser acusados -->
+  <p>A tabela de sintaxe do WhatsApp usa <code>*mensagem*</code> para negrito.</p>
+  <pre>&lt;div class="exemplo"&gt;markup em bloco de codigo&lt;/div&gt;</pre>
+  <p>O cálculo é R$ 2 * 3 * 4 por parcela.</p>
+  <p>Arquivo salvo em relatorio_final_2026.pdf na pasta.</p>
+  <p>Veja a nota_de_rodape e o intervalo 10~15 dias úteis.</p>
+  <button type="button">Enviar</button>
+</body></html>

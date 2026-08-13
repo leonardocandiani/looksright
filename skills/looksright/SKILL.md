@@ -1,6 +1,6 @@
 ---
 name: looksright
-description: Verifies that a web page actually renders correctly by opening it in a real Chrome across viewports and themes and running 11 deterministic checks. Use before telling anyone a screen is done, after any change that touches rendering (component, CSS, theme tokens, layout, copy length, data fetching), when the user reports that something "looks broken", "is blank", "is weird on mobile", or "is unreadable in dark mode", and when a page must be gated in CI. Do not use for backend-only changes or code that does not reach the DOM.
+description: Verifies that a web page actually renders correctly by opening it in a real Chrome across viewports and themes and running 12 deterministic checks. Use before telling anyone a screen is done, after any change that touches rendering (component, CSS, theme tokens, layout, copy length, data fetching), when the user reports that something "looks broken", "is blank", "is weird on mobile", or "is unreadable in dark mode", and when a page must be gated in CI. Do not use for backend-only changes or code that does not reach the DOM.
 ---
 
 # looksright
@@ -12,7 +12,7 @@ layout that scrolls sideways on a phone, live entirely in the rendered document
 and are invisible to every check that does not load it.
 
 LooksRight loads it. Real Chrome, every route times every viewport times every
-theme, 11 checks, exit code 1 when something is wrong.
+theme, 12 checks, exit code 1 when something is wrong.
 
 ## The rule this skill exists to enforce
 

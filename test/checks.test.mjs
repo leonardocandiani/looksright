@@ -35,6 +35,14 @@ describe('a page with nothing wrong', () => {
   });
 });
 
+describe('a page with nothing wrong, again', () => {
+  it('has no markup finding either', async () => {
+    const result = await check(site.url('clean.html'), { viewports: ['desktop'], themes: ['light'] });
+    const vazou = result.findings.filter((f) => f.check === 'leaked-markup');
+    assert.equal(vazou.length, 0, vazou.map((f) => f.message).join(' | '));
+  });
+});
+
 describe('a full screen app shell', () => {
   // The regression that made this a test: measuring the body box called every
   // `position: fixed` shell blank, which is the normal shape of a chat app or a
@@ -52,6 +60,48 @@ describe('a page whose content is clipped to nothing', () => {
     assert.ok(
       result.findings.some((f) => f.check === 'blank-page'),
       'a height:0 wrapper hiding all the content went unreported',
+    );
+  });
+});
+
+describe('a page where markup reached the screen', () => {
+  let findings;
+
+  before(async () => {
+    const result = await check(site.url('markup-vazado.html'), {
+      viewports: ['desktop'],
+      themes: ['light'],
+    });
+    findings = result.findings.filter((f) => f.check === 'leaked-markup');
+  });
+
+  // One per kind, because ten bubbles with the same unrendered bold are one bug.
+  const esperado = [
+    ['whatsapp-bold', /\*teste\*/],
+    ['bold', /\*\*R\$ 1\.250,00\*\*/],
+    ['link', /\[manual\]/],
+    ['placeholder', /\{\{cliente\.nome\}\}/],
+    ['entity', /&amp;/],
+    ['tag', /<br>/],
+    ['undefined', /undefined/],
+  ];
+
+  for (const [kind, pattern] of esperado) {
+    it(`reports the ${kind} that leaked`, () => {
+      const found = findings.filter((f) => f.detail?.kind === kind);
+      assert.equal(found.length, 1, `expected exactly one ${kind}, got ${found.length}`);
+      assert.ok(pattern.test(found[0].message), `message did not name it: ${found[0].message}`);
+    });
+  }
+
+  // The exclusions are the whole reason this check is usable: a page that
+  // documents WhatsApp syntax, or prints a multiplication, is not broken.
+  it('stays quiet about markup inside code and about punctuation in prose', () => {
+    const kinds = findings.map((f) => f.detail?.kind).sort();
+    assert.deepEqual(
+      kinds,
+      ['bold', 'entity', 'link', 'placeholder', 'tag', 'undefined', 'whatsapp-bold'],
+      'accused something that was fine',
     );
   });
 });
