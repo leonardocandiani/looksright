@@ -4,7 +4,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/license-MIT-15181C" alt="MIT license">
-  <img src="https://img.shields.io/badge/node-%3E%3D18.17-15181C" alt="Node 18.17 or newer">
+  <img src="https://img.shields.io/badge/node-%3E%3D22-15181C" alt="Node 22 or newer">
   <img src="https://img.shields.io/badge/browser-no%20download-FF6B2C" alt="No browser download">
 </p>
 
@@ -86,7 +86,7 @@ npx looksright checks    # lists the checks and their default level
 
 | id | level | catches |
 |---|---|---|
-| `blank-page` | error | the page rendered nothing, or the body has no height |
+| `blank-page` | error | the page rendered nothing, or every element with content hit tests as clipped away |
 | `console-errors` | error | an exception thrown during load (messages that only echo a failed request are dropped) |
 | `failed-requests` | error | 4xx, 5xx and network failures, grouped by host, favicon demoted to warn |
 | `stuck-loading` | error | a spinner or skeleton still on screen 1200ms later, confirmed by reading twice |
