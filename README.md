@@ -19,7 +19,7 @@ It exits 1 when it finds an error, which is the entire CI integration. Drop the 
 ```
 0  no error level finding survived
 1  at least one error level finding
-2  looksright could not run: no browser, bad config, bad flag
+2  looksright could not run: no browser, bad config, bad flag, bad usage
 ```
 
 ## Quickstart

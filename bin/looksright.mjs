@@ -35,7 +35,7 @@ Options
 Exit codes
   0  no error level finding survived
   1  at least one error level finding
-  2  looksright could not run: no browser, bad config, bad flag
+  2  looksright could not run: no browser, bad config, bad flag, bad usage
 
 Examples
   looksright check http://localhost:3000
@@ -107,16 +107,25 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
   const [command, target] = args._;
 
-  if (args.flags.help || args.flags.h || !command) {
+  // Pedir ajuda é o comando funcionando, não falhando. Sair 1 aqui faria
+  // `looksright --help` derrubar qualquer script que o chamasse.
+  if (args.flags.help || args.flags.h) {
     process.stdout.write(`${HELP}\n`);
-    process.exit(command ? 0 : 1);
+    process.exit(0);
+  }
+
+  // Uso errado sai 2, junto com config inválida e navegador ausente: 1 fica
+  // reservado para o único caso que interessa a um CI, que é achado de erro.
+  if (!command) {
+    process.stderr.write(`${HELP}\n`);
+    process.exit(2);
   }
 
   if (command === 'checks') return listChecks();
   if (command === 'init') return writeExampleConfig();
   if (command !== 'check') {
     process.stderr.write(`Unknown command "${command}".\n${HELP}\n`);
-    process.exit(1);
+    process.exit(2);
   }
   return check(args, target);
 }
@@ -138,7 +147,7 @@ async function check(args, target) {
 
   if (!config.routes.length) {
     process.stderr.write('Nothing to check. Pass a URL or add routes to the config.\n');
-    process.exit(1);
+    process.exit(2);
   }
 
   const quiet = Boolean(args.flags.quiet);
