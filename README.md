@@ -1,14 +1,37 @@
-<p align="center"><img src="assets/banner.png" alt="LooksRight" width="100%"></p>
+<!-- Banner -->
+<div align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,50:1a1a2e,100:00d9ff&height=200&section=header&text=LooksRight&fontSize=54&fontColor=ffffff&animation=fadeIn&fontAlignY=36&desc=Your%20agent%20says%20the%20page%20is%20done.%20LooksRight%20opens%20it%20and%20looks.&descAlignY=58&descSize=16" alt="LooksRight" width="100%" />
+</div>
 
-<p align="center"><em>Your agent says the page is done. LooksRight opens it and looks.</em></p>
+<div align="center">
 
-<p align="center">
-  <img src="https://img.shields.io/badge/license-MIT-15181C" alt="MIT license">
-  <img src="https://img.shields.io/badge/node-%3E%3D22-15181C" alt="Node 22 or newer">
-  <img src="https://img.shields.io/badge/browser-no%20download-FF6B2C" alt="No browser download">
-</p>
+  <br>
+  <img src="assets/banner.png" alt="LooksRight" width="720" />
+  <br><br>
 
----
+  <p><strong>Opens the page in a real Chrome and runs 12 deterministic checks against the rendered DOM. No baseline images, no service.</strong></p>
+
+  <p>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-00d9ff?style=for-the-badge" alt="License: MIT" /></a>
+    <img src="https://img.shields.io/badge/node-22%2B-1a1a2e?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="node: 22+" />
+    <img src="https://img.shields.io/badge/browser-no%20download-00d9ff?style=for-the-badge" alt="browser: no download" />
+    <a href="https://docs.claude.com/en/docs/claude-code"><img src="https://img.shields.io/badge/Made%20for-Claude%20Code-D97757?style=for-the-badge&logo=anthropic&logoColor=white" alt="Made for: Claude Code" /></a>
+    <a href="https://github.com/leonardocandiani/looksright/pulls"><img src="https://img.shields.io/badge/PRs-welcome-1a1a2e?style=for-the-badge" alt="PRs: welcome" /></a>
+  </p>
+
+  <p>
+  <a href="#quickstart">Quickstart</a> •
+  <a href="#what-it-checks">What it checks</a> •
+  <a href="#install">Install</a> •
+  <a href="#config">Config</a> •
+  <a href="#in-ci">In CI</a> •
+  <a href="#as-a-library">As a library</a> •
+  <a href="#why-it-exists">Why it exists</a> •
+  <a href="#license">License</a>
+  </p>
+</div>
+
+<br>
 
 An agent finishes a screen and reports it done. The build passes, the types check, the unit tests are green. You open it on your phone and the page is blank, or the price is invisible in dark mode, or the whole layout slides sideways under your thumb. None of those failures throw. None of them have a stack trace. Nothing in a type checker or a test runner has ever looked at a pixel.
 
@@ -281,3 +304,29 @@ Bug reports, new checks and better exclusions are all welcome. Start with [CONTR
 ## License
 
 MIT, see [LICENSE](LICENSE). Built by Leonardo Candiani ([github.com/leonardocandiani](https://github.com/leonardocandiani)). Sibling project: [keepwright](https://github.com/leonardocandiani/keepwright), which keeps a repo's architecture honest while LooksRight keeps its screens honest.
+
+<br>
+
+---
+
+<div align="center">
+  <p><strong>Built by <a href="https://github.com/leonardocandiani">Leonardo Candiani</a></strong> · More projects at <a href="https://github.com/leonardocandiani?tab=repositories">github.com/leonardocandiani</a></p>
+  <a href="https://leonardocandiani.com.br">
+    <img src="https://img.shields.io/badge/-Website-0d1117?style=for-the-badge&logo=safari&logoColor=00d9ff" alt="Website" />
+  </a>
+  <a href="https://github.com/leonardocandiani">
+    <img src="https://img.shields.io/badge/-GitHub-0d1117?style=for-the-badge&logo=github&logoColor=00d9ff" alt="GitHub" />
+  </a>
+  <a href="https://instagram.com/leonardocandiani">
+    <img src="https://img.shields.io/badge/-Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram" />
+  </a>
+  <a href="https://youtube.com/@oleonardocandiani">
+    <img src="https://img.shields.io/badge/-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube" />
+  </a>
+</div>
+
+<br>
+
+<div align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:00d9ff,50:1a1a2e,100:0d1117&height=120&section=footer&text=Thanks%20for%20stopping%20by&fontSize=18&fontColor=ffffff&fontAlignY=72" alt="Thanks for stopping by" width="100%" />
+</div>
