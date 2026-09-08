@@ -1,0 +1,45 @@
+{
+  "name": "LooksRight",
+  "desc": "Your agent says the page is done. LooksRight opens it and looks.",
+  "typing": [
+    "Your agent says the page is done. LooksRight looks.",
+    "12 deterministic UI checks in a real Chrome",
+    "Every route, viewport and theme, no baseline images",
+    "Exit 1 breaks the build: that is the whole CI integration"
+  ],
+  "hero": [
+    {
+      "src": "assets/banner.png",
+      "alt": "LooksRight",
+      "width": 720
+    }
+  ],
+  "tagline": "Opens the page in a real Chrome and runs 12 deterministic checks against the rendered DOM. No baseline images, no service.",
+  "badges": [
+    "license",
+    {
+      "label": "node",
+      "msg": "22+",
+      "logo": "nodedotjs"
+    },
+    {
+      "label": "browser",
+      "msg": "no download",
+      "color": "ACCENT"
+    },
+    "claude",
+    "prs"
+  ],
+  "pitch": "**LooksRight** closes the gap between green tests and a broken screen: it renders every route at phone, tablet and desktop, light and dark, and names the element and the number behind each finding, so you fix a line instead of squinting at a screenshot.",
+  "notice": "Not affiliated with or endorsed by Anthropic. \"Claude\" and \"Claude Code\" are Anthropic trademarks.",
+  "what": {
+    "product": "deterministic UI checker for agent-built frontends",
+    "run": "npx looksright check http://localhost:3000",
+    "scenes": "route × viewport (phone, tablet, desktop) × theme (light, dark)",
+    "checks": "12 checks: blank page, overflow, contrast, tap targets, broken images and more",
+    "output": "element + number per finding; exit 0 clean, 1 error, 2 could not run",
+    "browser": "uses the Chrome or Edge you already have (playwright-core), no download",
+    "ci": "one command after the app starts; no baseline, no snapshots, no account",
+    "license": "MIT"
+  }
+}

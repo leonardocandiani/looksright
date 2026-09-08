@@ -1,6 +1,12 @@
+<!-- readme-padrao:header -->
 <!-- Banner -->
 <div align="center">
   <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,50:1a1a2e,100:00d9ff&height=200&section=header&text=LooksRight&fontSize=54&fontColor=ffffff&animation=fadeIn&fontAlignY=36&desc=Your%20agent%20says%20the%20page%20is%20done.%20LooksRight%20opens%20it%20and%20looks.&descAlignY=58&descSize=16" alt="LooksRight" width="100%" />
+</div>
+
+<!-- Typing -->
+<div align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=21&duration=2800&pause=900&color=00d9ff&center=true&vCenter=true&width=840&lines=Your+agent+says+the+page+is+done.+LooksRight+looks.;12+deterministic+UI+checks+in+a+real+Chrome;Every+route%2C+viewport+and+theme%2C+no+baseline+images;Exit+1+breaks+the+build%3A+that+is+the+whole+CI+integration" alt="Your agent says the page is done. LooksRight looks." />
 </div>
 
 <div align="center">
@@ -20,18 +26,37 @@
   </p>
 
   <p>
-  <a href="#quickstart">Quickstart</a> •
-  <a href="#what-it-checks">What it checks</a> •
-  <a href="#install">Install</a> •
-  <a href="#config">Config</a> •
-  <a href="#in-ci">In CI</a> •
-  <a href="#as-a-library">As a library</a> •
-  <a href="#why-it-exists">Why it exists</a> •
-  <a href="#license">License</a>
+    <a href="#quickstart">Quickstart</a> •
+    <a href="#what-it-checks">What it checks</a> •
+    <a href="#install">Install</a> •
+    <a href="#config">Config</a> •
+    <a href="#in-ci">In CI</a> •
+    <a href="#as-a-library">As a library</a> •
+    <a href="#why-it-exists">Why it exists</a> •
+    <a href="#license">License</a>
   </p>
 </div>
 
 <br>
+
+> **LooksRight** closes the gap between green tests and a broken screen: it renders every route at phone, tablet and desktop, light and dark, and names the element and the number behind each finding, so you fix a line instead of squinting at a screenshot.
+
+> Not affiliated with or endorsed by Anthropic. "Claude" and "Claude Code" are Anthropic trademarks.
+
+## What it is
+
+```yaml
+product: deterministic UI checker for agent-built frontends
+run:     npx looksright check http://localhost:3000
+scenes:  route × viewport (phone, tablet, desktop) × theme (light, dark)
+checks:  12 checks: blank page, overflow, contrast, tap targets, broken images and more
+output:  element + number per finding; exit 0 clean, 1 error, 2 could not run
+browser: uses the Chrome or Edge you already have (playwright-core), no download
+ci:      one command after the app starts; no baseline, no snapshots, no account
+license: MIT
+```
+
+<!-- /readme-padrao:header -->
 
 An agent finishes a screen and reports it done. The build passes, the types check, the unit tests are green. You open it on your phone and the page is blank, or the price is invisible in dark mode, or the whole layout slides sideways under your thumb. None of those failures throw. None of them have a stack trace. Nothing in a type checker or a test runner has ever looked at a pixel.
 
@@ -305,12 +330,14 @@ Bug reports, new checks and better exclusions are all welcome. Start with [CONTR
 
 MIT, see [LICENSE](LICENSE). Built by Leonardo Candiani ([github.com/leonardocandiani](https://github.com/leonardocandiani)). Sibling project: [keepwright](https://github.com/leonardocandiani/keepwright), which keeps a repo's architecture honest while LooksRight keeps its screens honest.
 
+<!-- readme-padrao:footer -->
 <br>
 
 ---
 
 <div align="center">
   <p><strong>Built by <a href="https://github.com/leonardocandiani">Leonardo Candiani</a></strong> · More projects at <a href="https://github.com/leonardocandiani?tab=repositories">github.com/leonardocandiani</a></p>
+  <p>Leonardo Candiani builds AI agents that talk, decide and close deals. Cofounder of SixQuasar, operating Proteauto, SegSmart and IACall end to end.</p>
   <a href="https://leonardocandiani.com.br">
     <img src="https://img.shields.io/badge/-Website-0d1117?style=for-the-badge&logo=safari&logoColor=00d9ff" alt="Website" />
   </a>
@@ -330,3 +357,4 @@ MIT, see [LICENSE](LICENSE). Built by Leonardo Candiani ([github.com/leonardocan
 <div align="center">
   <img src="https://capsule-render.vercel.app/api?type=waving&color=0:00d9ff,50:1a1a2e,100:0d1117&height=120&section=footer&text=Thanks%20for%20stopping%20by&fontSize=18&fontColor=ffffff&fontAlignY=72" alt="Thanks for stopping by" width="100%" />
 </div>
+<!-- /readme-padrao:footer -->
